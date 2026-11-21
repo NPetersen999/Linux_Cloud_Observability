@@ -25,6 +25,7 @@
 * **Host-Level Hardening (Ubuntu):**
   * Enforced SSH key-pair authentication (`PasswordAuthentication no`).
   * Enabled `ufw` host firewall with default-deny inbound policy and explicit `OpenSSH` allowance.
+  * Applied initial system package updates (`apt update && apt upgrade`) and enabled `unattended-upgrades` so security patches are applied automatically.
   * Verified DNS resolution (`dig`) and outbound TLS connectivity (`curl`) prior to agent deployment.
 
 ## 5. Telemetry & Data Flow Architecture
