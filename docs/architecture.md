@@ -28,6 +28,7 @@
   * Applied initial system package updates (`apt update && apt upgrade`) and enabled `unattended-upgrades` so security patches are applied automatically.
   * Verified DNS resolution (`dig`) and outbound TLS connectivity (`curl`) prior to agent deployment.
 
-## 5. Telemetry & Data Flow Architecture
-* **Push-Based Telemetry Model:** The Ubuntu host pushes host metrics, system logs, and custom JSON health metrics outbound over HTTPS to Grafana Cloud.
-* **Collection Interval:** Configured at 30–60 second intervals to maintain high visibility into service health while staying well within free-tier bandwidth and active-series limits.
+## 5. Telemetry & REST API Health Pipeline
+* **Grafana Alloy Agent:** Installed and managed via `systemd` (`alloy`) on `observability-lab-linux`, configured with `prometheus.exporter.unix` for host metrics and `local.file_match` / `loki.source.file` for log tailing, with its HTTP UI bound to `127.0.0.1:12345` (loopback only).
+* **Python JSON Telemetry Collector (`scripts/api_health_check.py`):** Queries a public JSON REST endpoint (Open-Meteo current weather) and collects local 1m/5m/15m load averages and root (`/`) disk usage percentage, emitting structured JSON lines to `/var/log/observability_api_check.jsonl` and handling HTTP, network, timeout, JSON parse, and file I/O errors without silent crashes.
+* **Scheduled Execution:** Driven via a `systemd` `oneshot` service (`api-health-check.service`) and timer (`api-health-check.timer`) running on a 60-second interval, with stdout/stderr routed to `systemd-journald`.
