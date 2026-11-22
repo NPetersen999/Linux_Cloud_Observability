@@ -1,1 +1,2 @@
-
+* Verified `alloy` configuration syntax/formatting (`alloy fmt`), service startup, and loopback-only port binding (`ss -tlnp | grep 12345`).
+* Confirmed `scripts/api_health_check.py` syntax (`python3 -m py_compile`), actual path on the VM (`~/Linux_Cloud_Observability/scripts/api_health_check.py`), log file permissions (`/var/log/observability_api_check.jsonl`), live `200` JSON output, and simulated failure logging (`"ok": false` with error details).
